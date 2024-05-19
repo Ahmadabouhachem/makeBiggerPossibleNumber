@@ -1,36 +1,69 @@
 package org.example;
 
-import com.sun.jdi.IntegerValue;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println(encryptedMethod("abcd", 2));
+        //the methode give the biggest number back, but it swaps the even numbers with each others and the odd numbers with each other. 1234 --> 3412
+        System.out.println(makeBiggerPossibleNumber("234541"));
     }
 
-    public static String encryptedMethod(String encrypted, int k) {
+    public static String makeBiggerPossibleNumber(String numberStr) {
 
-        char[] alphabets = new char[]{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+        //converting string to integer
+        int nubmers = Integer.parseInt(numberStr);
 
-        String encryptedToUpper = encrypted.toUpperCase();
-        String saveEncrypted = "";
+        //converting integer to list of integers
+        List<Integer> numbersList = intToArray(nubmers);
 
-        char[] charArray = encryptedToUpper.toCharArray();
+        List<Integer> evens = new ArrayList<>();
+        List<Integer> odds = new ArrayList<>();
 
-        for (int i = 0; i < charArray.length; i++) {
-            for (int j = 0; j < alphabets.length; j++) {
-                if (charArray[i] == alphabets[j]) {
-                    if (j - k < 0) {
-                        saveEncrypted += alphabets[alphabets.length + j - k];
-                    } else saveEncrypted += alphabets[j - k];
-                }
+        //adding the even numbers to list and odd numbers to another list
+        for (int i = 0; i < numbersList.size(); i++) {
+            if (numbersList.get(i) % 2 == 0) {
+                evens.add(numbersList.get(i));
+            } else {
+                odds.add(numbersList.get(i));
             }
         }
-        return saveEncrypted;
+        // sort the list bigger to lower
+       evens = evens.stream()
+                .sorted((a, b) -> b - a)
+                .collect(Collectors.toList());
+
+        odds = odds.stream()
+                .sorted((a, b) -> b - a)
+                .collect(Collectors.toList());
+
+        //adding the numbers to new list and converting it to string
+        List<Integer> biggestNumberList = new ArrayList<>();
+        for (int i = 0; i <numbersList.size() ; i++) {
+            if (numbersList.get(i)%2==0){
+                biggestNumberList.add(evens.getFirst());
+                evens.removeFirst();
+            }else {
+                biggestNumberList.add(odds.getFirst());
+                odds.removeFirst();
+            }
+        }
+        String biggestNumberStr = biggestNumberList.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining());
+
+        return biggestNumberStr;
+    }
+
+    public static List<Integer> intToArray(int n) {
+        List<Integer> result = new ArrayList<>();
+        while (n != 0) {
+            result.add(0, n % 10);
+            n /= 10;
+        }
+        return result;
     }
 }

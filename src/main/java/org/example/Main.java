@@ -32,7 +32,7 @@ public class Main {
             }
         }
         // sort the list bigger to lower
-       evens = evens.stream()
+        evens = evens.stream()
                 .sorted((a, b) -> b - a)
                 .collect(Collectors.toList());
 
@@ -40,21 +40,18 @@ public class Main {
                 .sorted((a, b) -> b - a)
                 .collect(Collectors.toList());
 
-        //adding the numbers to new list and converting it to string
-        List<Integer> biggestNumberList = new ArrayList<>();
-        for (int i = 0; i <numbersList.size() ; i++) {
-            if (numbersList.get(i)%2==0){
-                biggestNumberList.add(evens.getFirst());
+        //adding the number to string
+        String biggestNumberStr = "";
+
+        for (int i = 0; i < numbersList.size(); i++) {
+            if (numbersList.get(i) % 2 == 0) {
+                biggestNumberStr += "" + evens.getFirst();
                 evens.removeFirst();
-            }else {
-                biggestNumberList.add(odds.getFirst());
+            } else {
+                biggestNumberStr += "" + odds.getFirst();
                 odds.removeFirst();
             }
         }
-        String biggestNumberStr = biggestNumberList.stream()
-                .map(String::valueOf)
-                .collect(Collectors.joining());
-
         return biggestNumberStr;
     }
 
